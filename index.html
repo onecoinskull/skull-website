@@ -2,25 +2,38 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Portfolio</title>
+  <title>Skull's Portfolio</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-      background: linear-gradient(135deg, #f0f8ff, #e0f7fa);
-      color: #333;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+      background: url('your-background.jpg') center/cover no-repeat fixed;
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
     }
 
-    header {
-      text-align: center;
-      padding: 2rem;
-      animation: fadeIn 2s ease-in-out;
+    .title-container {
+      position: relative;
+      height: 40vh;
+      overflow: visible;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .letter {
+      position: absolute;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .letter.fall {
+      animation: fallOut 1s forwards;
+    }
+
+    @keyframes fallOut {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(150vh) rotate(360deg); opacity: 0; }
     }
 
     .tabs {
@@ -31,96 +44,86 @@
     }
 
     .tab {
-      font-size: 1.2rem;
-      padding: 0.5rem 1rem;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.5);
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
       cursor: pointer;
-      transition: transform 0.3s ease, background 0.3s ease;
+      font-size: 1.2rem;
+      transition: background 0.3s;
     }
 
     .tab:hover {
-      background: #d1faff;
-      transform: scale(1.05) rotate(-1deg);
+      background: rgba(255,255,255,0.2);
     }
 
     .content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 1rem;
       display: none;
-      animation: slideIn 1s ease forwards;
+      text-align: center;
+      padding: 2rem;
+      backdrop-filter: blur(6px);
     }
 
     .content.active {
       display: block;
     }
 
-    .work-item {
-      margin: 1rem 0;
-      padding: 1rem;
-      background: #fff;
+    .gallery img {
+      max-width: 300px;
+      margin: 1rem;
       border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .work-item:hover {
-      transform: scale(1.02);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(50px); }
-      to { opacity: 1; transform: translateX(0); }
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>My Portfolio</h1>
-    <p>Welcome to my creative space</p>
-  </header>
+
+  <div class="title-container" id="title"></div>
 
   <div class="tabs">
-    <div class="tab" onclick="showCategory('graphics')">Graphics</div>
-    <div class="tab" onclick="showCategory('code')">Code</div>
+    <div class="tab" onclick="showTab('natural')">自然</div>
+    <div class="tab" onclick="showTab('unnatural')">不自然</div>
   </div>
 
-  <div id="graphics" class="content active">
-    <div class="work-item">
-      <h3>Illustration 01</h3>
-      <p>デジタルアートの作品説明など...</p>
-    </div>
-    <div class="work-item">
-      <h3>Poster Design</h3>
-      <p>展示会ポスターのビジュアルなど...</p>
+  <div class="content active" id="natural">
+    <div class="gallery">
+      <img src="natural1.jpg" alt="自然1">
+      <img src="natural2.jpg" alt="自然2">
     </div>
   </div>
 
-  <div id="code" class="content">
-    <div class="work-item">
-      <h3>JavaScript Game</h3>
-      <p>ミニゲームやインタラクションのサンプル...</p>
-    </div>
-    <div class="work-item">
-      <h3>Arduino Interface</h3>
-      <p>インタラクティブな作品と連携したコード作品...</p>
+  <div class="content" id="unnatural">
+    <div class="gallery">
+      <img src="unnatural1.jpg" alt="不自然1">
+      <img src="unnatural2.jpg" alt="不自然2">
     </div>
   </div>
 
   <script>
-    function showCategory(category) {
-      document.querySelectorAll('.content').forEach(el => {
-        el.classList.remove('active');
+    // タイトル文字のバラバラ配置と落下処理
+    const container = document.getElementById('title');
+    const text = "SKULL'S PORTFOLIO";
+    text.split('').forEach(char => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'letter';
+      span.style.top = `${Math.random() * 30 + 5}%`;
+      span.style.left = `${Math.random() * 80 + 10}%`;
+      container.appendChild(span);
+    });
+
+    // 落下アニメーション
+    document.querySelectorAll('.letter').forEach(letter => {
+      letter.addEventListener('click', () => {
+        letter.classList.add('fall');
       });
-      document.getElementById(category).classList.add('active');
+    });
+
+    // タブ切り替え
+    function showTab(tabId) {
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
     }
   </script>
 </body>
 </html>
+
